@@ -15,7 +15,7 @@ after_success:
   - docker build -t nomac/multi-server ./server
   - docker build -t nomac/multi-worker ./worker
 
-  - echo "$DCOKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push nomac/multi-client
   - docker push nomac/multi-nginx
   - docker push nomac/multi-server
