@@ -1,0 +1,22 @@
+sudo: required
+
+services:
+  -docker
+
+before_install:
+  - docker build -t nomac/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true nomac/react-test npm test
+
+after_success:
+  - docker build -t nomac/multi-client ./client
+  - docker build -t nomac/multi-nginx ./nginx
+  - docker build -t nomac/multi-server ./server
+  - docker build -t nomac/multi-worker ./worker
+
+  - echo "$DCOKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push nomac/multi-client
+  - docker push nomac/multi-nginx
+  - docker push nomac/multi-server
+  - docker push nomac/multi-worker
